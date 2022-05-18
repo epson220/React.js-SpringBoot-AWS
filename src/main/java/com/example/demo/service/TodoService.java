@@ -26,6 +26,18 @@ public class TodoService {
     }
 
     public List<TodoEntity> create(final TodoEntity entity) {
+
+        // 유효성 검증
+        validate(entity);
+
+        repository.save(entity);
+
+        log.info("Entity id : {} is saved", entity.getId());
+
+        return repository.findByUserId(entity.getUserId());
+    }
+
+    private void validate(final TodoEntity entity) {
         // 유효성 검증
         if(entity == null) {
             log.warn("entity 가 비어있음");
@@ -36,12 +48,5 @@ public class TodoService {
             log.warn("알려지지 않은 유저");
             throw new RuntimeException("알려지지 않은 유저");
         }
-
-        repository.save(entity);
-
-        log.info("Entity id : {} is saved", entity.getId());
-
-        return repository.findByUserId(entity.getUserId());
     }
 }
-
